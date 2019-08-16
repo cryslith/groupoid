@@ -44,7 +44,7 @@ class Groupoid(discord.Client):
             (channel, name) = self.inhabit_keys[key]
         except KeyError:
             return await message.channel.send('no such key')
-        self.inhabitants[message.author] = (channel, name)
+        self.inhabitants[message.author] = key
         return await message.channel.send('**you are {}**'.format(name))
 
     async def get_webhook(self, channel):
@@ -59,7 +59,8 @@ class Groupoid(discord.Client):
 
     async def handle_message(self, message):
         try:
-            (channel, name) = self.inhabitants[message.author]
+            key = self.inhabitants[message.author]
+            (channel, name) = self.inhabit_keys[key]
         except KeyError:
             return await message.channel.send('not connected; use `!inhabit`')
         hook = await self.get_webhook(channel)
