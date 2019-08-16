@@ -64,7 +64,8 @@ class Groupoid(discord.Client):
         except KeyError:
             return await message.channel.send('not connected; use `!inhabit`')
         hook = await self.get_webhook(channel)
-        return await hook.send(message.content, username=name, avatar_url=self.user.avatar_url)
+        content = message.content.replace('@', '')  # no anonymous pings
+        return await hook.send(content, username=name, avatar_url=self.user.avatar_url)
 
     async def on_ready(self):
         logger.info('logged in as {}'.format(self.user))
